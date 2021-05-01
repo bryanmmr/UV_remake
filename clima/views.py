@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from secret import *
 # Create your views here.
 import urllib.request
 import json
@@ -7,7 +7,7 @@ import json
 def index(request):
     if request.method == 'POST':
         city = request.POST['city']
-        source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q=' + city + ',PE&units=metric&appid=c584a96e0ea51468f3d4ca485f5db154').read()
+        source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q=' + city + ',PE&units=metric&appid=' + API_KEY).read()
 
         list_of_data = json.loads(source)
         data = {
