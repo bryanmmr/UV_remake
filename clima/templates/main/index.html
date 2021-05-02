@@ -7,6 +7,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UVIndex</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.6.0/darkly/bootstrap.min.css">
+    <style>
+        #map {
+            height: 500px;
+        }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
+    <script>
+        var lat = {{lat}};
+        var lng = {{lng}};
+        window.initMap = function(){
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 8,
+                center: { lat: lat, lng: lng },
+            });
+            const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const markers = locations.map((location, i) => {
+                return new google.maps.Marker({
+                position: location,
+                label: labels[i % labels.length],
+                });
+            });
+            new MarkerClusterer(map, markers, {
+                imagePath:
+                "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+            });
+        }
+        const locations = [
+            {
+                lat : lat,
+                lng : lng
+            },
+        ]
+        var evento = document.getElementById('buscar');
+        evento.addEventListener('click', function(){
+            console.log('Funcional');
+        })
+        
+    </script>
 </head>
 <body>
     <div class="navbar fixed-top navbar-dark">
@@ -18,7 +57,7 @@
                 {% csrf_token %}
                 <div class="input-group">
                     <input type="text" class="form-control" name='city' placeholder="Ciudad">
-                    <div class="input-group-button"><button type="submit" class="btn btn-primary">Buscar</button></div>
+                    <div class="input-group-button"><button type="submit" class="btn btn-primary" id='buscar'>Buscar</button></div>
                 </div>
             </form>
         </nav>
@@ -41,5 +80,14 @@
         </div>
         {% endif %}
     </div>
+    <div>
+        <div id="map"></div>
+    </div>
+    
+    
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key={{API_KEY}}&callback=initMap&libraries=&v=weekly"
+    async
+  ></script>
 </body>
 </html>
