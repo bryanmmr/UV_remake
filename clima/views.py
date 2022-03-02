@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from secret import *
+# from secret import *
+import os
 # Create your views here.
 import urllib.request
 import json
@@ -7,7 +8,7 @@ import json
 def index(request):
     if request.method == 'POST':
         city = request.POST['city']
-        source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q=' + city + ',PE&units=metric&appid=' + API_KEY + '&lang=es').read()
+        source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/weather?q=' + city + ',PE&units=metric&appid=' + os.getenv('API_KEY') + '&lang=es').read()
 
         list_of_data = json.loads(source)
         data = {
@@ -21,7 +22,7 @@ def index(request):
             "main"  : str(list_of_data['weather'][0]['main']),
             "description" : str(list_of_data['weather'][0]['description']),
             "icon" : str(list_of_data['weather'][0]['icon']),
-            "API_KEY" : str(API_KEY_MAPS),
+            "API_KEY" : str(os.getenv('API_KEY_MAPS')),
         }
         print(data)
     else:
